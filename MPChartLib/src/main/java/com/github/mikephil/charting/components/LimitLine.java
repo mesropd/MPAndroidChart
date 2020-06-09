@@ -38,6 +38,12 @@ public class LimitLine extends ComponentBase {
     /** indicates the position of the LimitLine label */
     private LimitLabelPosition mLabelPosition = LimitLabelPosition.RIGHT_TOP;
 
+    /** min value / maximum (the y-value or xIndex) */
+    private Float minValue = null;
+
+    /** max value / maximum (the y-value or xIndex) */
+    private Float maxValue = null;
+
     /** enum that indicates the position of the LimitLine label */
     public enum LimitLabelPosition {
         LEFT_TOP, LEFT_BOTTOM, RIGHT_TOP, RIGHT_BOTTOM
@@ -211,5 +217,21 @@ public class LimitLine extends ComponentBase {
      */
     public String getLabel() {
         return mLabel;
+    }
+
+    public Float getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(Float minValue) {
+        this.minValue = minValue;
+    }
+
+    public Float getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(Float maxValue) {
+        this.maxValue = maxValue;
     }
 }

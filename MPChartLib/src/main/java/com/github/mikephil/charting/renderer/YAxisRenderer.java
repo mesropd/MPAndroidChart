@@ -264,14 +264,16 @@ public class YAxisRenderer extends AxisRenderer {
         if (limitLines == null || limitLines.size() <= 0)
             return;
 
-        float[] pts = mRenderLimitLinesBuffer;
-        pts[0] = 0;
-        pts[1] = 0;
+        float[] yPts = mRenderLimitLinesBuffer;
+        yPts[0] = 0;
+        yPts[1] = 0;
+        float[] xPts = new float[2];
+        float minValue;
+        float maxValue;
         Path limitLinePath = mRenderLimitLines;
         limitLinePath.reset();
 
         for (int i = 0; i < limitLines.size(); i++) {
-
             LimitLine l = limitLines.get(i);
 
             if (!l.isEnabled())
@@ -287,12 +289,29 @@ public class YAxisRenderer extends AxisRenderer {
             mLimitLinePaint.setStrokeWidth(l.getLineWidth());
             mLimitLinePaint.setPathEffect(l.getDashPathEffect());
 
-            pts[1] = l.getLimit();
+            yPts[1] = l.getLimit();
+            mTrans.pointValuesToPixel(yPts);
 
-            mTrans.pointValuesToPixel(pts);
+            if(l.getMinValue() == null) {
+                minValue = mViewPortHandler.contentLeft();
+            }
+            else {
+                xPts[0] = l.getMinValue();
+                mTrans.pointValuesToPixel(xPts);
+                minValue = Math.max(xPts[0], mViewPortHandler.contentLeft());
+            }
 
-            limitLinePath.moveTo(mViewPortHandler.contentLeft(), pts[1]);
-            limitLinePath.lineTo(mViewPortHandler.contentRight(), pts[1]);
+            if(l.getMaxValue() == null) {
+                maxValue = mViewPortHandler.contentRight();
+            }
+            else {
+                xPts[0] = l.getMaxValue();
+                mTrans.pointValuesToPixel(xPts);
+                maxValue = Math.min(xPts[0], mViewPortHandler.contentRight());
+            }
+
+            limitLinePath.moveTo(minValue, yPts[1]);
+            limitLinePath.lineTo(maxValue, yPts[1]);
 
             c.drawPath(limitLinePath, mLimitLinePaint);
             limitLinePath.reset();
@@ -321,28 +340,28 @@ public class YAxisRenderer extends AxisRenderer {
                     mLimitLinePaint.setTextAlign(Align.RIGHT);
                     c.drawText(label,
                             mViewPortHandler.contentRight() - xOffset,
-                            pts[1] - yOffset + labelLineHeight, mLimitLinePaint);
+                            yPts[1] - yOffset + labelLineHeight, mLimitLinePaint);
 
                 } else if (position == LimitLine.LimitLabelPosition.RIGHT_BOTTOM) {
 
                     mLimitLinePaint.setTextAlign(Align.RIGHT);
                     c.drawText(label,
                             mViewPortHandler.contentRight() - xOffset,
-                            pts[1] + yOffset, mLimitLinePaint);
+                            yPts[1] + yOffset, mLimitLinePaint);
 
                 } else if (position == LimitLine.LimitLabelPosition.LEFT_TOP) {
 
                     mLimitLinePaint.setTextAlign(Align.LEFT);
                     c.drawText(label,
                             mViewPortHandler.contentLeft() + xOffset,
-                            pts[1] - yOffset + labelLineHeight, mLimitLinePaint);
+                            yPts[1] - yOffset + labelLineHeight, mLimitLinePaint);
 
                 } else {
 
                     mLimitLinePaint.setTextAlign(Align.LEFT);
                     c.drawText(label,
                             mViewPortHandler.offsetLeft() + xOffset,
-                            pts[1] + yOffset, mLimitLinePaint);
+                            yPts[1] + yOffset, mLimitLinePaint);
                 }
             }
 

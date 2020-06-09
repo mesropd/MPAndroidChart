@@ -101,7 +101,7 @@ public class LineChartActivity1 extends DemoBase implements OnSeekBarChangeListe
             chart.setDragEnabled(true);
             chart.setScaleEnabled(true);
             // chart.setScaleXEnabled(true);
-            // chart.setScaleYEnabled(true);
+             chart.setScaleYEnabled(false);
 
             // force pinch zoom along both axis
             chart.setPinchZoom(true);
@@ -134,9 +134,10 @@ public class LineChartActivity1 extends DemoBase implements OnSeekBarChangeListe
         {   // // Create Limit Lines // //
             LimitLine llXAxis = new LimitLine(9f, "Index 10");
             llXAxis.setLineWidth(4f);
-            llXAxis.enableDashedLine(10f, 10f, 0f);
             llXAxis.setLabelPosition(LimitLabelPosition.RIGHT_BOTTOM);
             llXAxis.setTextSize(10f);
+            llXAxis.setMinValue(20f);
+            llXAxis.setMaxValue(30f);
             llXAxis.setTypeface(tfRegular);
 
             LimitLine ll1 = new LimitLine(150f, "Upper Limit");
@@ -160,7 +161,7 @@ public class LineChartActivity1 extends DemoBase implements OnSeekBarChangeListe
             // add limit lines
             yAxis.addLimitLine(ll1);
             yAxis.addLimitLine(ll2);
-            //xAxis.addLimitLine(llXAxis);
+            yAxis.addLimitLine(llXAxis);
         }
 
         // add data
